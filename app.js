@@ -24,7 +24,7 @@ app.get('/authorize', function(req, res) {
     AUTH_CODE = authCode.substring(authCode.indexOf('=') + 1);
     console.log(AUTH_CODE)
     console.log("\n Requesting Access Token ...\n")
-    setTimeout(requestAccessToken, 5000)
+    setTimeout(requestAccessToken, 1000)
 })
 
 app.listen(PORT, () => {
@@ -51,8 +51,9 @@ const requestAccessToken = () => {
         ACCESS_TOKEN = accessInfo.access_token;
         //console.log(body)
         console.log(`ACCESS TOKEN:\n${ACCESS_TOKEN}\n`)
-        console.log("Testing API Call ...")
-        setTimeout(usersMe, 5000)
+        console.log("Testing API Calls ...")
+        setTimeout(usersMe, 2500)
+        setTimeout(sendChat, 5000)
     })
 }
 
@@ -71,4 +72,28 @@ const usersMe = () => {
 
         console.log(`\n ${body}`)
     })
+
 }
+
+// This API call sends a message to a contact of the current user
+const sendChat = () => {
+    request({
+      url: 'https://api.zoom.us/v2/chat/users/me/messages',
+      method: 'POST',
+      json: true,
+      body: {
+        'message': "Hello from VS Code",
+        'to_contact': "email@email.com",
+      },
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + ACCESS_TOKEN
+      }
+    }, (error, httpResponse, body) => {
+      if (error) {
+        console.log('Error sending chat.', error)
+      } else {
+        console.log(body)
+      }
+    })
+  }
