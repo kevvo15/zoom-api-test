@@ -9,6 +9,7 @@ const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const REDIRECT_URI = process.env.REDIRECT_URI;
 
 let AUTH_CODE;
+let ACCESS_TOKEN;
 
 const app = express();
 app.use(bodyParser.json())
@@ -47,7 +48,8 @@ const requestAccessToken = () => {
     request(options, function(err, response, body) {
         if (err) throw new Error(err);
         const accessInfo = JSON.parse(body)
+        ACCESS_TOKEN = accessInfo.access_token;
         console.log(body)
-        console.log(`\n${accessInfo.access_token}`)
+        console.log(`ACCESS TOKEN:\n${ACCESS_TOKEN}`)
     })
 }
