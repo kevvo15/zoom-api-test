@@ -49,7 +49,26 @@ const requestAccessToken = () => {
         if (err) throw new Error(err);
         const accessInfo = JSON.parse(body)
         ACCESS_TOKEN = accessInfo.access_token;
-        console.log(body)
-        console.log(`ACCESS TOKEN:\n${ACCESS_TOKEN}`)
+        //console.log(body)
+        console.log(`ACCESS TOKEN:\n${ACCESS_TOKEN}\n`)
+        console.log("Testing API Call ...")
+        setTimeout(usersMe, 5000)
+    })
+}
+
+//This API call gets info regarding the current user (ie; the user who signed in with their credentials)
+const usersMe = () => {
+    let options = {
+        method: 'GET',
+        url: `https://api.zoom.us/v2/users/me`,
+        headers: {
+            authorization: `Bearer ${ACCESS_TOKEN}`
+        }
+    }
+
+    request(options, function(err, response, body) {
+        if (err) throw new Error(err);
+
+        console.log(`\n ${body}`)
     })
 }
