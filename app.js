@@ -17,8 +17,9 @@ app.get('/', function(req, res) {
 
 app.get('/authorize', function(req, res) {
     res.send("Success!")
-    console.log(res.socket.parser.incoming.originalUrl)
-    // Request Access Token Here with new auth code after parsing from the res.socket.parser.incoming.originalUrl
+    let authCode = res.socket.parser.incoming.originalUrl;
+    authCode = authCode.substring(authCode.indexOf('=') + 1);
+    console.log(authCode)
 })
 
 app.listen(PORT, () => {
