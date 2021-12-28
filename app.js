@@ -22,8 +22,32 @@ app.get('/authorize', function(req, res) {
     let authCode = res.socket.parser.incoming.originalUrl;
     AUTH_CODE = authCode.substring(authCode.indexOf('=') + 1);
     console.log(AUTH_CODE)
+    console.log("\n Requesting Access Token ...\n")
+    setTimeout(requestAccessToken, 5000)
 })
 
 app.listen(PORT, () => {
     console.log(`Listening on http://localhost:${PORT}/`)
 })
+
+const requestAccessToken = () => {
+    let options = {
+        method: 'POST',
+        url: 'https://zoom.us/oauth/token',
+        qs: {
+            grant_type: 'authorization_code',
+            code: AUTH_CODE,
+            redirect_uri: REDIRECT_URI,
+        },
+        headers: {
+            Authorization: 'Basic ' + Buffer.from(CLIENT_ID + ':' + CLIENT_SECRET).toString('base64')
+        }
+    }
+
+    request(options, function(err, response, body) {
+        if (err) throw new Error(err);
+        const accessInfo = JSON.parse(body)
+        console.log(body)
+        console.log(`\n${accessInfo.access_token}`)
+    })
+}
