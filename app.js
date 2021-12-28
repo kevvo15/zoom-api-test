@@ -8,6 +8,8 @@ const CLIENT_ID = process.env.CLIENT_ID;
 const CLIENT_SECRET = process.env.CLIENT_SECRET;
 const REDIRECT_URI = process.env.REDIRECT_URI;
 
+let AUTH_CODE;
+
 const app = express();
 app.use(bodyParser.json())
 
@@ -18,8 +20,8 @@ app.get('/', function(req, res) {
 app.get('/authorize', function(req, res) {
     res.send("Success!")
     let authCode = res.socket.parser.incoming.originalUrl;
-    authCode = authCode.substring(authCode.indexOf('=') + 1);
-    console.log(authCode)
+    AUTH_CODE = authCode.substring(authCode.indexOf('=') + 1);
+    console.log(AUTH_CODE)
 })
 
 app.listen(PORT, () => {
